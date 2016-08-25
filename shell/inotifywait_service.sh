@@ -62,13 +62,13 @@ case "$1" in
         ;;
 
     restart )
-                $SCRIPTNAME stop
+                $0 stop
                 sleep 1
-                $SCRIPTNAME start
+                $0 start
         ;;
 
     * )
-                echo "Usage: $SCRIPTNAME {start|stop|restart|status}"
+                echo "Usage: $0 {start|stop|restart|status}"
                 exit 1
         ;;    
 
