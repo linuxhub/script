@@ -1,0 +1,77 @@
+<html>
+<head>
+<meta charset="utf-8">
+
+<!-- 百度 jQuery CDN  -->
+<script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+
+<script >
+$(document).ready(function(){
+   
+  // 红色 (所有p元素的背景颜色更改为红色)
+  $("#set_red").click(function(){
+    $("p").css("background-color","red");
+  });
+
+
+  // 绿色
+  $("#set_green").click(function(){
+    $("p").css("background-color","green");
+  });
+
+  // 黄色
+  var code_name = 'yellow'; //变量
+  $("#set_yellow").click(function(){
+    $("p").css("background-color",code_name);
+  });
+
+  
+
+  // 蓝色
+  var code_array = [];    //定义一个数组
+  code_array[0] = 'blue'; //蓝色
+  code_array[1] = 'black'; //黑色
+
+  var array_value_blue = code_array[0];//取出第1个值
+  $("#set_blue").click(function(){
+    $("p").css("background-color",array_value_blue);
+  });
+
+  // 黑色
+  var array_value_black = code_array[1]; //取出第2个值
+  $("#set_black").click(function(){
+    $("p").css("background-color",array_value_black);
+  });
+
+
+
+  //随机色
+  code_array[2] = 'red'; //红色
+  code_array[3] = 'green'; //绿色
+  code_array[4] = 'yellow'; //黄色
+
+  $("#set_random").click( function(){
+    var code_array_len = code_array.length; //数组长度
+	var num = Math.floor( Math.random() * code_array_len ); //随机数（数组总数范围内）
+	$("p").css("background-color",code_array[num]);
+ 	});
+	   
+});
+
+</script>
+</head>
+
+<body>
+	<h2>标题</h2>
+	<p>段落1</p>
+	<p>段落2</p>
+
+	<button id="set_red" type="button" >红色</button>
+	<button id="set_green" type="button" >绿色</button>
+	<button id="set_yellow" type="button" >黄色</button>
+	<button id="set_blue" type="button" >蓝色</button>
+	<button id="set_black" type="button" >黑色</button>
+	<button id="set_random" type="button" >随机色</button>
+</body>
+
+</html>
