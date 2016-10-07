@@ -1,0 +1,8 @@
+
+1.查询数据并排序
+code = 601099
+data =  History.query.filter(History.code == code).order_by(History.date.desc()).all() #查询排序（降序）
+data =  History.query.filter(History.code == code).order_by(History.date.asc()).all()  #查询排序（升序）
+转成SQL语句如下：
+SELECT  *  FROM st_history WHERE st_history.code = code ORDER BY st_history.date DESC #查询排序（降序）
+SELECT  *  FROM st_history WHERE st_history.code = code ORDER BY st_history.date ASC  #查询排序（升序）
