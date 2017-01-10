@@ -1,0 +1,37 @@
+#!/bin/bash
+# /etc/init.d/zeJavaApp
+# chmod +x /etc/init.d/zeJavaApp
+
+PNAEM="zeJavaApp"
+
+case "$1" in
+        start)
+		/usr/local/tomcat/$PNAEM/apache-tomcat-7.0.72/bin/startup.sh
+	;;
+
+        stop)
+		/usr/local/tomcat/$PNAEM/apache-tomcat-7.0.72/bin/shutdown.sh 
+		pid=`ps -efl|grep $PNAEM|grep -v grep |grep -v "init"| awk '{print $4}'|tail -n 1`
+		while [ $pid ]
+		do
+			
+			pid=`ps -efl|grep $PNAEM |grep -v grep|grep -v "init"|awk '{print $4}'|tail -n 1`
+			if [ $pid ];then
+				echo $pid
+				/bin/kill -9 $pid
+			fi
+		done
+	;;
+
+        restart)
+                $SCRIPTNAME stop
+                sleep 1
+                $SCRIPTNAME start
+        ;;
+
+		
+	*)
+                echo "Usage: $SCRIPTNAME {start|stop|restart}"
+                exit 1
+        ;;
+esac
