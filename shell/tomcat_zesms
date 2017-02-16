@@ -1,0 +1,106 @@
+#!/bin/bash
+# zeping lai
+# tomcat script  
+# /etc/init.d/tomcat_zesms
+# chom +x /etc/init.d/tomcat_zesms
+
+#项目名称
+project_name=zesms
+
+# 关闭TOMCAT服务的端口（server.xml文件定义的变量）
+port_server=8001
+
+#建立HTTP连接的端口（server.xml文件定义的变量）
+port_http=8081
+
+
+#项目目录
+project_dir=/data/project/$project_name
+
+#tomcat程序目录
+tomcat_dir=$project_dir/apache-tomcat-7.0.72
+
+#项目程序输出日志文件
+logs_dir=/data/logs/tomcat/$project_name
+
+#服务脚本文件
+catalina=$tomcat_dir/bin/catalina.sh
+
+########################################################
+# Java jdk 目录	
+export JAVA_HOME=/usr/local/jdk1.7.0_79
+
+# Java jre 目录
+export JRE_HOME=/usr/local/jdk1.7.0_79/jre
+
+# Tomcat 安装目录
+export CATALINA_HOME=$tomcat_dir
+
+# Tomcat 工作目录
+export CATALINA_BASE=$tomcat_dir
+
+# 日志目录
+export CATALINA_OUT="$logs_dir/catalina.$(date +'%Y-%m-%d').out" 
+
+# 进程ID
+export CATALINA_PID="/tmp/tomcat-${project_name}.pid" 
+
+# tomcat 运行参数
+export CATALINA_OPTS="-Dtomcat.server.port=$port_server -Dtomcat.http.port=$port_http -Xms1024m -Xmx1024m -XX:PermSize=128m -XX:MaxPermSize=256m -XX:+HeapDumpOnOutOfMemoryError"
+
+# 参数注解
+# tomcat.server.port=8001 #用来关闭TOMCAT服务的端口（server.xml文件定义的变量）
+# tomcat.http.port=8081   #负责建立HTTP连接的端口 （server.xml文件定义的变量）
+
+# -Xms1024m  #JVM初始化时最小内存
+# -Xmx1024m  #JVM可使用的最大内存
+
+# -XX:PermSize=128m       #内存永久保留区域
+# -XX:MaxPermSize=256m    #内存最大永久保留区域
+
+########################################################
+
+case "$1" in
+        start)
+
+			# 清空缓存目录
+			rm -rf $tomcat_dir/work
+
+			# 启动tomcat服务
+			/bin/bash $catalina start
+		;;
+		
+		stop)
+	        # 停止tomcat服务
+			/bin/bash $catalina stop 0 -force 
+			
+			pid=`ps -efl|grep $project_name |grep -v grep |grep -v "init"| awk '{print $4}'|tail -n 1`
+			while [ $pid ]
+			do
+			
+			pid=`ps -efl|grep $project_name |grep -v grep|grep -v "init"|awk '{print $4}'|tail -n 1`
+			if [ $pid ];then
+				echo $pid
+				/bin/kill -9 $pid
+			fi
+			done
+		;;
+		
+		status)
+			    
+				if [ -f $CATALINA_PID ];then
+				    echo ""
+					netstat -nlp | grep `cat $CATALINA_PID`
+				fi
+				echo ""
+				 ps -efl |grep -v grep |grep -v "/etc/init.d/" |grep $project_name
+				echo ""
+		;;
+
+		
+		*)
+                echo "Usage: $SCRIPTNAME {start|stop|status}"
+                exit 1
+        ;;
+		
+esac
