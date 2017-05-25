@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts | ajax 异步加载</title>
+    <!-- 引入 echarts.js -->
+    <script src="echarts.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="width: 600px;height:400px;"></div>
+
+
+
+    <script type="text/javascript">
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: 'ECharts 入门示例'
+            },
+            tooltip: {},
+            legend: {
+                data:['年龄']
+            },
+            xAxis: {
+                data:[] //用户名
+            },
+            yAxis: {},
+            series: [{
+                name: '年龄',
+                type: 'bar',
+                data:[] //年龄
+            }]
+        };
+
+
+        $.ajax({
+            
+            cache: false,
+            type: "POST",
+            url: "./getuser.php", //把表单数据发送到
+            data: null, 
+            dataType : "json",  
+            async: true,  //是否为异步加载，true为异步，false为同步 [这里修改成同步异步加载都可以的]
+
+            error: function(errmsg) {
+                    alert("Ajax获取服务器数据出错了！"+ errmsg);
+            },
+
+
+            success: function(result) {
+   
+                for(var i = 0 ; i < result.length; i++){  
+                    option.xAxis.data.push(result[i].username);
+                    option.series[0].data.push(parseFloat(result[i].age));
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+            }
+    
+        });
+
+
+    </script>
+
+</body>
+</html>
