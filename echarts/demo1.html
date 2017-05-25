@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECharts | ajax 同步加载</title>
+    <!-- 引入 echarts.js -->
+    <script src="echarts.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+<body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="width: 600px;height:400px;"></div>
+
+
+
+    <script type="text/javascript">
+
+        // 初始化两个数组，盛装从数据库中获取到的数据
+        var names = [], ages = [];
+
+        //调用ajax来实现同步的加载数据
+        function getusers() {
+            $.ajax({
+
+                cache: false,
+                type: "POST",
+                url: "./getuser.php", //把表单数据发送到
+                data: null, 
+                dataType : "json",  
+                async: false, // 这里修改成同步加载，异步加载会出错
+
+                error: function(errmsg) {
+                        alert("Ajax获取服务器数据出错了！"+ errmsg);
+                },
+
+                success: function(result){
+
+                    for(var i = 0 ; i < result.length; i++){
+                            names.push(result[i].username);
+                            ages.push(result[i].age);
+                    }
+                    
+                }
+
+            });
+            return names, ages;
+            }
+
+        // 执行同步请求
+        getusers();
+
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: 'ECharts 入门示例'
+            },
+            tooltip: {},
+            legend: {
+                data:['年龄']
+            },
+            xAxis: {
+                data: names
+            },
+            yAxis: {},
+            series: [{
+                name: '年龄',
+                type: 'bar',
+                data: ages
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+</body>
+</html>
