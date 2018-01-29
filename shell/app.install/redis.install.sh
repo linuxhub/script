@@ -42,3 +42,20 @@ chkconfig redis on
 #启动服务
 /etc/init.d/redis start
 echo "info" | redis-cli
+
+
+#优化项
+echo 511 > /proc/sys/net/core/somaxconn
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+echo "vm.overcommit_memory=1"  >> /etc/sysctl.conf
+echo "net.core.somaxconn=2048"  >> /etc/sysctl.conf
+
+cat >>/etc/rc.local<<eof
+#redis
+if test -f /sys/kernel/mm/transparent_hugepage/enabled; then
+     echo never > /sys/kernel/mm/transparent_hugepage/enabled
+fi
+if test -f /sys/kernel/mm/transparent_hugepage/defrag; then
+     echo never > /sys/kernel/mm/transparent_hugepage/defrag
+fi
+eof
