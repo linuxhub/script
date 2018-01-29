@@ -31,7 +31,7 @@ mkdir -p /data/logs/mongodb         #日志目录
 
 
 #下载配置文件
-curl https://raw.githubusercontent.com/linuxhub/script/master/shell/app.install/mongod.conf -o /usr/local/mongodb/conf/mongodb.conf --progress
+curl https://raw.githubusercontent.com/linuxhub/script/master/shell/app.install/mongod.conf -o /usr/local/mongodb/conf/mongod.conf --progress
 
 #下载服务脚本
 curl https://raw.githubusercontent.com/linuxhub/script/master/shell/app.install/mongodb.service.sh -o /etc/init.d/mongodb --progress
