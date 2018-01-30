@@ -3,6 +3,7 @@
 # install.MySQL5.6.Centos6.5.sh
 # MySQL 5.6 安装脚本
 
+# 自动安装: wget -q -O - https://raw.githubusercontent.com/linuxhub/script/master/shell/install.MySQL5.6.Centos6.5.sh | bash
 
 
 # Check if user is root
@@ -36,7 +37,8 @@ mkdir -p $mysql_data
 
 # 下载
 cd $down_dir
-wget https://cdn.mysql.com//Downloads/MySQL-5.6/mysql-5.6.35.tar.gz
+#wget https://cdn.mysql.com//Downloads/MySQL-5.6/mysql-5.6.35.tar.gz
+wget https://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.39.tar.gz
 
 # 添加程序运行用户
 groupadd mysql
