@@ -37,7 +37,6 @@ mkdir -p $mysql_data
 
 # 下载
 cd $down_dir
-#wget https://cdn.mysql.com//Downloads/MySQL-5.6/mysql-5.6.35.tar.gz
 wget https://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.39.tar.gz
 
 # 添加程序运行用户
@@ -50,8 +49,8 @@ yum -y install gcc-c++ libstdc++-devel cmake
 
 
 # 源码安装
-tar zxvf mysql-5.6.35.tar.gz
-cd mysql-5.6.35
+tar zxvf mysql-5.6.39.tar.gz
+cd mysql-5.6.39
 
 cmake \
 -DCMAKE_INSTALL_PREFIX=$mysql_dir \
