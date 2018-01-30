@@ -13,7 +13,6 @@ if [ $(id -u) != "0" ]; then
 fi
 
 
-
 # 目录-程序包下载
 down_dir=/data/down
 
@@ -45,7 +44,7 @@ useradd -s /sbin/nologin -M -g mysql mysql
 
 # 组件
 yum -y install ncurses-devel bison openssl openssl-devel 
-yum -y install gcc-c++ libstdc++-devel cmake
+yum -y install gcc-c++ libstdc++-devel cmake autoconf
 
 
 # 源码安装
