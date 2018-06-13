@@ -87,8 +87,8 @@ cmake \
 -DWITH_READLINE=1 \
 -DENABLED_LOCAL_INFILE=1 \
 -DWITH_PARTITION_STORAGE_ENGINE=1 \
+-DDOWNLOAD_BOOST=1 \
 -DWITH_BOOST=/usr/local/boost/boost
-
 
 
 make -j24 && make install
@@ -109,8 +109,8 @@ EOF
 
 
 # 初始化数据库 (mysql_install_db被废弃了，取而代之的是mysqld –initialize)
-$mysql_dir/bin/mysqld --defaults-file=/etc/my.cnf --initialize  --datadir=$mysql_data --basedir=$mysql_dir --user=mysql 
-
+# --initialize-insecure #创建空密码的root@localhost账号
+$mysql_dir/bin/mysqld --defaults-file=/etc/my.cnf --initialize-insecure --datadir=$mysql_data --basedir=$mysql_dir --user=mysql 
 
 
 
