@@ -1,0 +1,87 @@
+#!/bin/bash
+# author: www.linuxhub.org
+# chkconfig: 2345 55 25
+# distro. For CentOS/Redhat run: 'chkconfig --add go-mysql-elasticsearch'
+
+### BEGIN INIT INFO
+# Provides:          go-mysql-elasticsearch
+# Required-Start:    $all
+# Required-Stop:     $all
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: starts the go-mysql-elasticsearch server
+# Description:       go-mysql-elasticsearch 
+### END INIT INFO
+
+NAME=go-mysql-elasticsearch
+APP_BIN=/usr/local/mysql-elasticsearch/bin/$NAME
+CONFIGFILE=/usr/local/mysql-elasticsearch/etc/river.toml
+
+if [ -s /bin/ss ]; then
+    StatBin=/bin/ss
+else
+    StatBin=/bin/netstat
+fi
+
+case "$1" in
+    start)
+        echo -n "Starting $NAME... "
+		if $StatBin -tnpl | grep -q "go-mysql-elas";then
+            echo "$NAME (pid `pidof $NAME`) already running."
+            exit 1
+        fi
+		
+		nohup $APP_BIN -config $CONFIGFILE > /dev/null 2>&1 &
+		
+		if [ "$?" != 0 ] ; then
+            echo " failed"
+            exit 1
+        else
+            echo " done"
+        fi
+        ;;
+		
+	stop)
+		echo -n "Stoping $NAME... "
+        if ! $StatBin -tnpl | grep -q "go-mysql-elas"; then
+            echo "$NAME is not running."
+            exit 1
+        fi
+
+		PID=`pidof $NAME`
+		kill -2 $PID
+		
+		if [ "$?" != 0 ] ; then
+            echo " failed."
+            exit 1
+        else
+            echo " done"
+        fi
+
+		;;
+		
+		
+    restart)
+        $0 stop
+        sleep 1
+        $0 start
+        ;;
+	
+
+    status)
+        if $StatBin -tnpl | grep -q "go-mysql-elas"; then
+           PID=`pidof $NAME`
+           echo "$NAME (pid $PID) is running..."
+		   endpoint=`$StatBin -tnpl | grep go-mysql-elas|awk '{print $4}'`
+           echo -e "EndPoint: $endpoint \n" 
+        else
+           echo "$NAME is stopped."
+           exit 0
+        fi
+        ;;
+
+    *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+        ;;
+esac
