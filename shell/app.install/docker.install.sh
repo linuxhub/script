@@ -21,12 +21,12 @@ mkdir -p /data/docker
 mkdir -p /etc/docker
 
 echo -e "\n2.下载部署"
-cd $down_dir
+cd /data/down
 wget https://download.docker.com/linux/static/stable/x86_64/docker-${docker_ver}.tgz
 tar -xvf docker-${docker_ver}.tgz
 mv docker/* /usr/local/docker/bin/
 ln -s /usr/local/docker/bin/docker /usr/local/bin/
-
+rm -rf docker-${docker_ver}.tgz
 
 echo -e "\n3.环境变量"
 echo "export PATH=\"\$PATH:/usr/local/docker/bin\"" >> /etc/profile
@@ -71,4 +71,4 @@ systemctl enable docker
 
 echo -e "\n7.安装完成"
 docker --version
-docker ps
+netstat -nltp | grep dockerd
