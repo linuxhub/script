@@ -5,7 +5,7 @@
 # ./cadvisor
 # http://{ip}:9001/containers/docker
 
-# 自动部署： wget -O /usr/local/bin/cadvisor https://raw.githubusercontent.com/linuxhub/script/master/shell/app.install/cadvisor &&  chmod +x /usr/local/bin/cadvisor && cadvisor start
+# 自动部署： wget -O /usr/local/bin/cadvisor https://raw.githubusercontent.com/linuxhub/script/master/shell/app.install/cadvisor &&  chmod +x /usr/local/bin/cadvisor && cadvisor start && cadvisor status
 
 PORT=9001
 NAME=cadvisor
