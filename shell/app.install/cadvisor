@@ -1,0 +1,60 @@
+#!/bin/sh
+# author: www.linuxhub.cn
+# filename: cadvisor
+# chmod +x cadvisor
+# ./cadvisor
+# http://{ip}:9001/containers/docker
+
+# 自动部署： wget -O /usr/local/bin/cadvisor https://raw.githubusercontent.com/linuxhub/script/master/shell/app.install/cadvisor &&  chmod +x /usr/local/bin/cadvisor && cadvisor
+
+PORT=9001
+NAME=cadvisor
+IMAGE=linuxhub/cadvisor:v0.33.0
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+if [ -d "/usr/local/docker/bin" ];then
+    PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/docker/bin
+fi
+
+run(){
+docker run \
+  --name=$NAME \
+  --publish=$PORT:8080 \
+  --restart=always \
+  --cpu-period=50000 --cpu-quota=25000 \
+  --memory 100M --memory-swap -1 \
+  --volume=/:/rootfs:ro \
+  --volume=/var/run:/var/run:ro \
+  --volume=/sys:/sys:ro \
+  --volume=/var/lib/docker/:/var/lib/docker:ro \
+  --volume=/dev/disk/:/dev/disk:ro \
+  --detach=true \
+  $IMAGE
+}
+
+case "$1" in
+    start)
+        run
+    ;;
+
+    stop)
+        docker stop $NAME && docker rm $NAME
+    ;;
+
+    restart)
+        docker restart $NAME
+    ;;
+
+    status)
+        docker ps --filter name=$NAME
+    ;;
+
+    logs)
+         docker logs --tail 10 $NAME
+    ;;
+
+    *)
+        echo "Usage: $SCRIPTNAME {start|stop|restart|status|logs}"
+        exit 1
+    ;;
+esac
