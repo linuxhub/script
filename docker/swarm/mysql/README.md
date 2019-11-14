@@ -23,7 +23,7 @@ vim ./conf.sh
 
 ## 4.验证部署
 ```bash
-
+./show_databases.sh
 ```
 
 ## 4.配置MySQL主从
