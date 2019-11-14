@@ -1,0 +1,73 @@
+version: '3.7'
+services:
+  ##mysql_master##:
+    image: linuxhub/mysql:5.7.28
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.app == mysql
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: stop-first
+        failure_action: rollback
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+    ports:
+      - '3306:3306'
+    volumes:
+      - /data/mysql/##mysql_master##:/var/lib/mysql
+    configs:
+        - source: ##mysql_master##
+          target: /etc/mysql/mysql.conf.d/mysqld.cnf
+    environment:
+        MYSQL_ROOT_PASSWORD: ##db_root_pwd##
+        TZ: "Asia/Shanghai"
+
+  ##mysql_slave##:
+    image: linuxhub/mysql:5.7.28
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.app == mysql-slave
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: stop-first
+        failure_action: rollback
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+    ports:
+      - '3307:3306'
+    volumes:
+      - /data/mysql/##mysql_slave##:/var/lib/mysql
+    configs:
+        - source: ##mysql_slave##
+          target: /etc/mysql/mysql.conf.d/mysqld.cnf
+    environment:
+        MYSQL_ROOT_PASSWORD: ##db_root_pwd##
+        TZ: "Asia/Shanghai"
+
+configs:
+    ##mysql_master##:
+        file: ../assets/mysqld.cnf
+    ##mysql_slave##:
+        file: ../assets/mysqld-slave.cnf

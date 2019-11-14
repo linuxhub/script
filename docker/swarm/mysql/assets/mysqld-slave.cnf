@@ -1,0 +1,38 @@
+
+[mysqld]
+pid-file	= /var/run/mysqld/mysqld.pid
+socket		= /var/run/mysqld/mysqld.sock
+datadir		= /var/lib/mysql
+
+lower_case_table_names = 1
+character_set_server = utf8
+default_storage_engine = innodb
+max_connections = 1000
+max_connect_errors = 100
+table_open_cache = 2000
+max_allowed_packet = 1024M
+open_files_limit = 65535
+default_time_zone = 'SYSTEM'
+symbolic-links=0
+
+sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+
+# slave
+server-id=120
+binlog-format=ROW
+log-bin=master-bin
+log-slave-updates=true
+gtid-mode=on
+
+enforce-gtid-consistency=true
+master-info-repository=TABLE
+relay-log-info-repository=TABLE
+sync-master-info=1
+slave-parallel-workers=2
+binlog-checksum=CRC32
+master-verify-checksum=1
+slave-sql-verify-checksum=1
+binlog-rows-query-log_events=1
+
+report-port=3306
+report-host=ze_yz-mysql-slave
