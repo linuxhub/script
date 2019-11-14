@@ -34,5 +34,3 @@ master-verify-checksum=1
 slave-sql-verify-checksum=1
 binlog-rows-query-log_events=1
 
-report-port=3306
-report-host=ze_yz-mysql-slave
